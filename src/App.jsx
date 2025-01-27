@@ -1,12 +1,41 @@
-// import React from "react";
+import React from "react";
 
 const App = () => {
-  // const [count, setCount] = useState(0)
+//   const [name, setName] = React.useState("");
+//   const [ email, setEmail] = React.useState("");
+const [ form, setForm] = React.useState({ 
+    name: "",
+    email: "",
+  
+});
+
+  function handleSubimit(event) {
+    event.preventDefault();
+    console.log(name);
+  }
+  function handleChange({target}) { 
+    const { id, value } = target;
+    setForm({...form, [id]: value } );
+  }
 
   return (
-    // <>
-    <div>App React</div>
-    // </>
+    <form onSubmit={handleSubimit}>
+      <label htmlFor="name">Name:</label>
+      <input
+        id="name"
+        type="text"
+        value={form.name}
+        onChange={handleChange}
+      />
+      <label htmlFor="email">Email:</label>
+      <input
+        id="email"
+        type="email"
+        value={form.email}
+        onChange={handleChange}
+      />
+      <button>Submit</button>
+    </form>
   );
 };
 

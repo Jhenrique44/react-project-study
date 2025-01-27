@@ -1,0 +1,57 @@
+import { useState, useEffect } from "react";
+import Product from "./Product";
+import { UserStorage } from "./UserContext";
+import useLocalStorage from "./useLocalStorage";
+import { request, data, loading, error } from "./useFetch";
+const App = () => {
+  const [product, setProduct] = useState(null);
+  //personlize Hook
+  const [produto, setProduto] = useLocalStorage("produto", "");
+  const { request, data } = useFetch();
+  // function handleClick({ target }) {
+  //   setProduct(target.innerText);
+  // }
+  function handleClick({ target }) {
+    setProduto(target.innerText);
+  }
+  useEffect(() => {
+    async function fetchData() {
+      const { res, json } = await request(
+        "https://ranekapi.origamid.dev/json/api/produto"
+      );
+    }
+    fetchData();
+  }, []);
+  // useEffect(() => {
+  //   const localProduct = window.localStorage.getItem("product");
+  //   if (localProduct !== null) setProduct(localProduct);
+  // }, []);
+
+  // useEffect(() => {
+  //   if (product !== null) window.localStorage.setItem("product", product);
+  // }, [product]);
+  if (error) return <p></p>;
+  if (loading) return <p>Loading...</p>;
+  if (data)
+    return (
+      <UserStorage>
+        <div>
+          <h1> Preferences: {produto}</h1>
+          <button onClick={handleClick} style={{ marginRight: ".5rem" }}>
+            Notebook <button onClick={handleClick}></button>
+          </button>
+          <button onClick={handleClick} style={{ marginRight: ".5rem" }}>
+            Smartphone <button onClick={handleClick}>Clear</button>
+          </button>
+          <Product product={product}></Product>
+          {data?.map((produto) => (
+            <div key={produto.id}>
+              <h1>{produto.nome}</h1>
+            </div>
+          ))}
+        </div>
+      </UserStorage>
+    );
+};
+
+export default App;
